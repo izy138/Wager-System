@@ -1,27 +1,33 @@
 {
-  "name": "wager-zone",
+  "name": "ante",
   "version": "1.0.0",
   "description": "Express + Postgres via Docker",
   "type": "module",
   "scripts": {
-    "start": "NODE_ENV=production npx node src/app.js",
-    "dev": "NODE_ENV=development npx nodemon src/app.js",
-    "docker:dev:api": "NODE_ENV=development docker compose --env-file .env.development --profile api up",
-    "docker:dev": "NODE_ENV=development docker compose --env-file .env.development up",
-    "docker:prod:api": "NODE_ENV=production docker compose --env-file .env.production --profile api up -d",
-    "docker:prod": "NODE_ENV=production docker compose --env-file .env.production up -d",
-    "docker:dev:down": "docker compose --env-file .env.development down",
-    "docker:reset": "docker compose --env-file .env.development down -v"
+    "dev": "NODE_ENV=development tsx watch src/app.ts",
+    "docker:db": "docker compose up db",
+    "docker:api": "docker compose --profile api up",
+    "docker:down": "docker compose down",
+    "docker:reset": "docker compose down -v"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
-    "pg": "^8.20.0"
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.20.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^25.5.0",
+    "@types/pg": "^8.20.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
   }
 }

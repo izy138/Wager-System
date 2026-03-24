@@ -1,24 +1,23 @@
+name: ante
+
 services:
   api:
     build:
       context: .
-      target: ${NODE_ENV:-development}
+      target: development
     ports:
-      - "${API_PORT:-8080}:8080"
-    env_file:
-      - .env.${NODE_ENV:-development}
+      - '${API_PORT:-8080}:8080'
+    env_file: .env
     environment:
-      - NODE_ENV=${NODE_ENV:-development}
-      - DATABASE_URL=postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-dev_db}
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/ante_db
     depends_on:
       db:
         condition: service_healthy
     networks:
       - app-network
-    profiles: ["api"]
-    restart: ${RESTART_POLICY:-no}
+    profiles: ['api']
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
+      test: ['CMD', 'wget', '-qO-', 'http://localhost:8080/health']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -27,29 +26,24 @@ services:
   db:
     image: postgres:16-alpine
     ports:
-      - "${DB_PORT:-5432}:5432"
+      - '${DB_PORT:-5432}:5432'
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-dev_db}
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ante_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-dev_db}",
-        ]
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d ante_db']
       interval: 5s
       timeout: 5s
       retries: 5
     networks:
       - app-network
-    restart: ${RESTART_POLICY:-no}
 
 volumes:
   pgdata: {}
 
 networks:
   app-network:
-    name: wager-zone-${NODE_ENV:-development}
+    driver: bridge
