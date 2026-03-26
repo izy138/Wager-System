@@ -32,8 +32,31 @@ cp .env.example .env
 Generate a secure JWT secret:
 
 ```bash
-openssl rand -hex 32
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
+
+JWT Example Output:
+```
+a3f9c1d8e4b7a2c6f1e9d3b5a7c8e2f4b6d9c1a3e5f7b2c4d6e8f1a9c3b5d7e2
+```
+
+Now in your .env add your newly generated key.
+
+```
+JWT_SECRET=your_generated_secret_here
+```
+
+##### 💡Food for Thought
+###### While Technically, a JWT secret can be any string of characters, but for it to be secure, it must meet specific cryptographic standards to prevent attackers from forging their own tokens.
+
+A valid JWT secret should:
+- Be long (at least 32 bytes)
+- Be random (not human-readable)
+- Not be committed to Git
+
+
+
+
 
 ### 3. Start the database
 
